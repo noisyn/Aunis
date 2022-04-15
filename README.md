@@ -3,6 +3,8 @@ Aunis is a control and scripting interface in Python for automating measurements
 
 It requires that you have a Nanonis Mimea system including the programming interface. All commands provided via the Nanonis TCP interface can be integrated into Aunis without programming knowledge. For this purpose, the commands only have to be included in the special JSON files. An explanation of the syntax will follow shortly.
 
+![Scripting interface](images/Scripting.png)
+
 ## Installation
 Clone the Github repository using
 <code>git clone https://github.com/noisyn/Aunis</code>
