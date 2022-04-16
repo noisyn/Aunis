@@ -57,7 +57,7 @@ class runScriptThread(QtCore.QThread):
 class AunisGUI(QMainWindow):
     def __init__(self):
         super(AunisGUI, self).__init__()
-        self.fileAunisIcon = 'AunisIcon.svg'
+        self.fileAunisIcon = 'GUI\\AunisIcon.svg'
 
         self.connected = False
         self.cancelScript = False
@@ -71,7 +71,7 @@ class AunisGUI(QMainWindow):
         self.startUp()
     
     def setupUI(self):
-        ui_file = QFile('AunisGUI.ui')
+        ui_file = QFile('GUI\\AunisGUI.ui')
         ui_file.open(QFile.ReadOnly)
 
         loader = QUiLoader()
@@ -258,7 +258,7 @@ class AunisGUI(QMainWindow):
                 self.scripting_Script.appendPlainText(scriptLine)
 
     def openManual(self):
-        os.startfile('manual.pdf')
+        os.startfile('Manual\\manual.pdf')
     
     def aboutMessage(self):
         msg = 'Aunis - Nanonis Control & Scripting Interface\n\n'
