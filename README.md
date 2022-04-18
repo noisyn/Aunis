@@ -48,16 +48,16 @@ Here is an example to illustrate the syntax and structure of a new entry/command
     }
 ```
 
-- The name of the new command is ==setXY==.
-- The entry ==cmdName== specifies the function that is made available via the TCP Programming Interface and is to be executed. In this case the function "FolMe.XYPosSet".
-- The entry ==argTypes== defines the arguments and their types. These follow directly from the Nanonis TCP protocol. The function "FolMe.XYPosSet" expects the three arguments "X (m)" [type: float64], "Y (m)" [type: float64] and "Wait end of move" [type: unsigned int32]. The types are specified according to the definition in the [struct module](https://docs.python.org/3/library/struct.html#format-characters), i.e. in this case "d" (float64) and "I" (unsigned int32).
-- The entry ==argValues== defines default values for the individual arguments. These are only used if the respective argument is not made available via the scripting interface.
-- The entry ==args== specifies which arguments and in which order they can be set from the scripting interface. In this example only the arguments "X (m)" and "Y (m)" can be set. For the argument "Wait end of move" the default value is always used.
-- The last entry ==respTypes== defines the return values. The syntax for the last entry is similar to that of ==argTypes==. The arguments and their types can be taken from the Nanonis TCP protocol. In this example, no return values are specified. See the next example for the use of return values.
+- The name of the new command is **setXY**.
+- The entry **cmdName** specifies the function that is made available via the TCP Programming Interface and is to be executed. In this case the function "FolMe.XYPosSet".
+- The entry **argTypes** defines the arguments and their types. These follow directly from the Nanonis TCP protocol. The function "FolMe.XYPosSet" expects the three arguments "X (m)" [type: float64], "Y (m)" [type: float64] and "Wait end of move" [type: unsigned int32]. The types are specified according to the definition in the [struct module](https://docs.python.org/3/library/struct.html#format-characters), i.e. in this case "d" (float64) and "I" (unsigned int32).
+- The entry **argValues** defines default values for the individual arguments. These are only used if the respective argument is not made available via the scripting interface.
+- The entry **args** specifies which arguments and in which order they can be set from the scripting interface. In this example only the arguments "X (m)" and "Y (m)" can be set. For the argument "Wait end of move" the default value is always used.
+- The last entry **respTypes** defines the return values. The syntax for the last entry is similar to that of **argTypes**. The arguments and their types can be taken from the Nanonis TCP protocol. In this example, no return values are specified. See the next example for the use of return values.
 
-The new command ==setXY== then has the following syntax within the scripting interface: ==setXY \[X\] \[Y\]== 
+The new command **setXY** then has the following syntax within the scripting interface: **setXY \[X\] \[Y\]** 
 
-Example of a call would be: ==setXY 5e-9 -30e-9==
+Example of a call would be: **setXY 5e-9 -30e-9**
 
 Here is another example to illustrate the handling of return values:
 
@@ -72,7 +72,7 @@ Here is another example to illustrate the handling of return values:
         }
 ```
 
-- The last entry ==respTypes== defines the return values. The syntax for the last entry is similar to that of ==argTypes==. The arguments and their types can be taken from the Nanonis TCP protocol. In this case there is only the return value "Z position (m)" [type: float32].
+- The last entry **respTypes** defines the return values. The syntax for the last entry is similar to that of **argTypes**. The arguments and their types can be taken from the Nanonis TCP protocol. In this case there is only the return value "Z position (m)" [type: float32].
 
 #### Special command
 The special commands have to be created in the same way as the normal commands via the JSON file "special_commands.json" in the folder "/cmds". The syntax is exactly the same. In addition, their functionality must be hard coded in "PyNanonis.py".
