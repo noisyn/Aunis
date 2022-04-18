@@ -10,16 +10,35 @@ from scipy.optimize import curve_fit
 
 class NanonisInterface():
     def __init__(self):
+        """Loads the command lists from the JSON files.
+        """        
         self.connected = False
         self.commandList = self.getCommandList("cmds/commands.json")
         self.specialCommandList = self.getCommandList("cmds/special_commands.json")
 
     def getCommandList(self, filename):
+        """Reads the predefined commands from a JSON file.
+
+        Args:
+            filename (str): Name of the JSON file.
+
+        Returns:
+            dict: List of commands and arguments.
+        """        
         with open(filename, "r") as cmd_file:
             commandList = json.load(cmd_file)
         return commandList
 
     def connect(self, ip, port):
+        """Connects to the Nanonis software via the TCP interface.
+
+        Args:
+            ip (str): IP adress of the TCP interface.
+            port (int): Port of the TCP interface.
+
+        Returns:
+            bool: Connection status. True: Connected. False: Disconnected.
+        """        
         try:
             self.nanonis = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.nanonis.connect((ip, port))
@@ -30,6 +49,11 @@ class NanonisInterface():
         return self.connected
     
     def disconnect(self):
+        """Disconnects from the Nanonis software.
+
+        Returns:
+            bool: Connection status. True: Connected. False: Disconnected.
+        """        
         if self.connected:
             self.nanonis.close()
             self.connected = False
@@ -37,6 +61,16 @@ class NanonisInterface():
         return self.connected
 
     def convertStringToByte(self, cmd, size):
+        """Converts a string to a bytes object. 
+        Byte object is padded with zeros until the length equals 'size'.
+
+        Args:
+            cmd (str): String to be converted.
+            size (int): Size of byte-array.
+
+        Returns:
+            byte: Converted string as bytes object.
+        """        
         cmd_bytes = cmd.encode()
         if len(cmd_bytes) < size:
             num_pads = size - len(cmd_bytes)
@@ -45,16 +79,47 @@ class NanonisInterface():
         return cmd_bytes
 
     def convertNumberToByte(self, num, numType):
+        """Converts a number into a byte object (big-endian).
+
+        Args:
+            num (int, float, etc.): Any number that is accepted by struct.pack().
+            numType (str): Format type according to the module struct().
+
+        Returns:
+            bytes: Converted number as bytes object.
+        """        
         conv_format = '>{}'.format(numType)
         num_bytes = struct.pack(conv_format, num)
         return num_bytes
 
     def convertBytesToNumber(self, numBytes, numType):
+        """Converts a bytes object (big-endian) into a number.
+
+        Args:
+            numBytes (bytes): Bytes object to be converted.
+            numType (str): Format type according to the module struct().
+
+        Returns:
+            int, float, etc.: Number. Type according to specified Number Formatting Type.
+        """        
         conv_format = '>{}'.format(numType)
         num = struct.unpack(conv_format, numBytes)[0]
         return num
 
     def encodeRequestMessage(self, cmdName, sendResponse, argValues, argTypes):
+        """Encodes a command including arguments into a byte array that can be interpreted 
+        by the Nanonis software. For syntax of the request messages see page 23-29 in 
+        Nanonis TCP Protocol. 
+
+        Args:
+            cmdName (str): Name of the executed command.
+            sendResponse (int): Defines if the server sends a message back (=1) or not (=0).
+            argValues (list): Argument values.
+            argTypes (list): Argument types according to Number Formatting Type.
+
+        Returns:
+            bytes: Encoded request message.
+        """        
         request = b''
         body = b''
         if len(argValues) > 0:
@@ -72,6 +137,16 @@ class NanonisInterface():
         return request
     
     def decodeResponseMessage(self, resp, respTypes):
+        """Decodes a response message from the Nanonis software. 
+        Currently only single values can be decoded. Arrays are not yet supported.
+
+        Args:
+            resp (bytes): Response message from Nanonis.
+            respTypes (str): Response type according to Number Formatting Types.
+
+        Returns:
+            int, float, etc.: Decoded response message.
+        """        
         headerSize = 40 # Fixed
         index = headerSize
         decodedResp = {}
@@ -82,6 +157,14 @@ class NanonisInterface():
         return decodedResp
     
     def sendRequest(self, request):
+        """Sends a data/request message to the Nanonis software.
+
+        Args:
+            request (bytes): Request message encoded according to the Nanonis TCP Protocol.
+
+        Returns:
+            bool, number: Error (True/False), Decoded response message.
+        """        
         resp = ''
         err = False
         if self.connected:
@@ -92,6 +175,15 @@ class NanonisInterface():
         return err, resp
           
     def command(self, cmdAlias, cmdArgs):
+        """Executes a (normal) command, i.e. a single command.
+
+        Args:
+            cmdAlias (str): Command name/alias according to JSON files.
+            cmdArgs (list): Command arguments.
+
+        Returns:
+            bool, number: Error (True/False), Decoded response message.
+        """        
         resp = ''
         err = False
         print(cmdAlias, cmdArgs)
@@ -138,6 +230,17 @@ class NanonisInterface():
         return err, resp
     
     def specialCommand(self, cmdAlias, cmdArgs):
+        """Executes a (special) command.
+        Special commands are either compound commands or commands that require 
+        further intermediate steps or calculations. These commands are hard coded.
+
+        Args:
+            cmdAlias (str): Command name/alias according to JSON files.
+            cmdArgs (list): Command arguments.
+
+        Returns:
+            bool, number: Error (True/False), Decoded response message.
+        """
         resp = ''
         err = False
         if cmdAlias in self.specialCommandList:
