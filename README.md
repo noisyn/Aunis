@@ -7,6 +7,7 @@ It requires that you have a Nanonis Mimea system including the programming inter
 
 ## Installation
 Clone the Github repository using
+
 <code>git clone https://github.com/noisyn/Aunis</code>
 
 ## Dependencies
@@ -23,6 +24,7 @@ A user manual can be found here: [Manual](manual.pdf).
 The functionality of Aunis can be easily extended by adding new commands via the JSON file "commands.json" in the folder "/cmds". For this purpose, in addition to the name/alias of the new command, the specific arguments for the command must also be defined. This includes the type as well as a default value for the argument. Furthermore, it is possible to specify which arguments can be set via the scripting interface and for which the default values should be used.
 
 Here is an example to illustrate the syntax and structure of a new entry/command:
+
 <code>
     "setXY": {
         "cmdName": "FolMe.XYPosSet",
@@ -51,9 +53,11 @@ Here is an example to illustrate the syntax and structure of a new entry/command
 - The entry **args** specifies which arguments and in which order they can be set from the scripting interface. In this example only the arguments "X (m)" and "Y (m)" can be set. For the argument "Wait end of move" the default value is always used.
 - The last entry **respTypes** defines the return values. The syntax for the last entry is similar to that of **argTypes**. The arguments and their types can be taken from the Nanonis TCP protocol. In this example, no return values are specified. See the next example for the use of return values.
 
-The new command **setXY** then has the following syntax within the scripting interface: **setXY \[X\] \[Y\]** Example of a call would be: **setXY 5e-9 -30e-9**
+The new command **setXY** then has the following syntax within the scripting interface: **setXY \[X\] \[Y\]** 
+Example of a call would be: **setXY 5e-9 -30e-9**
 
 Here is another example to illustrate the handling of return values:
+
 <code>
     "getZ": {
         "cmdName": "ZCtrl.ZPosGet",
