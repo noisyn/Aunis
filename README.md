@@ -3,6 +3,8 @@ Aunis is a control and scripting interface in Python for automating measurements
 
 It requires that you have a Nanonis Mimea system including the programming interface. All commands provided via the Nanonis TCP interface can be integrated into Aunis without programming knowledge. For this purpose, the commands only have to be included in the special JSON files. 
 
+Current version 0.22 (18.04.2022)
+
 ![GUI](images/GUI.png)
 
 ## Installation
@@ -54,6 +56,7 @@ Here is an example to illustrate the syntax and structure of a new entry/command
 - The last entry **respTypes** defines the return values. The syntax for the last entry is similar to that of **argTypes**. The arguments and their types can be taken from the Nanonis TCP protocol. In this example, no return values are specified. See the next example for the use of return values.
 
 The new command **setXY** then has the following syntax within the scripting interface: **setXY \[X\] \[Y\]** 
+
 Example of a call would be: **setXY 5e-9 -30e-9**
 
 Here is another example to illustrate the handling of return values:
