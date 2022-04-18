@@ -92,4 +92,4 @@ Here is another example to illustrate the handling of return values:
 The special commands have to be created in the same way as the normal commands via the JSON file "special_commands.json" in the folder "/cmds". The syntax is exactly the same. In addition, their functionality must be hard coded in "PyNanonis.py".
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the [MIT License](LICENSE).
