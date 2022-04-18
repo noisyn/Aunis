@@ -25,7 +25,7 @@ The functionality of Aunis can be easily extended by adding new commands via the
 
 Here is an example to illustrate the syntax and structure of a new entry/command:
 
-<code>
+```json
     "setXY": {
         "cmdName": "FolMe.XYPosSet",
         "argTypes": {
@@ -44,7 +44,7 @@ Here is an example to illustrate the syntax and structure of a new entry/command
         ],
         "respTypes": {}
     }
-</code>
+```
 
 - The name of the new command is **setXY**.
 - The entry **cmdName** specifies the function that is made available via the TCP Programming Interface and is to be executed. In this case the function "FolMe.XYPosSet".
@@ -58,7 +58,7 @@ Example of a call would be: **setXY 5e-9 -30e-9**
 
 Here is another example to illustrate the handling of return values:
 
-<code>
+```json
     "getZ": {
         "cmdName": "ZCtrl.ZPosGet",
         "argTypes": {},
@@ -67,7 +67,7 @@ Here is another example to illustrate the handling of return values:
         "respTypes": {
             "Z position (m)": "f"
         }
-</code>
+```
 
 - The last entry **respTypes** defines the return values. The syntax for the last entry is similar to that of **argTypes**. The arguments and their types can be taken from the Nanonis TCP protocol. In this case there is only the return value "Z position (m)" [type: float32].
 
