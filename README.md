@@ -21,6 +21,20 @@ Aunis requires the following libraries:
 ## Documentation
 A user manual can be found here: [Manual](manual.pdf).
 
+### Example
+The following example initially sets the bias voltage to 0.1 V. Then it scans an image, increases the bias voltage by 0.1 V, waits for 10 s and repeats the whole process 10 times.
+
+```
+setBias 0.1
+
+repeat 10
+doScan
+waitEndScan
+addBias 0.1
+wait 10
+end
+```
+
 ### Adding new commands
 #### Normal commands
 The functionality of Aunis can be easily extended by adding new commands via the JSON file "commands.json" in the folder "/cmds". For this purpose, in addition to the name/alias of the new command, the specific arguments for the command must also be defined. This includes the type as well as a default value for the argument. Furthermore, it is possible to specify which arguments can be set via the scripting interface and for which the default values should be used.
