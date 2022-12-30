@@ -1,6 +1,7 @@
-# Copyright (c) 2022 Taner Esat <t.esat@fz-juelich.de>
+# Copyright (c) 2022-2023 Taner Esat <t.esat@fz-juelich.de>
 
 import json
+import os
 import socket
 import struct
 import time
@@ -8,26 +9,56 @@ import time
 import numpy as np
 from scipy.optimize import curve_fit
 
+
 class NanonisInterface():
     def __init__(self):
         """Loads the command lists from the JSON files.
         """        
         self.connected = False
-        self.commandList = self.getCommandList("cmds/commands.json")
-        self.specialCommandList = self.getCommandList("cmds/special_commands.json")
+        self.commandList = self.loadCommandList("cmds/commands.json")
+        self.specialCommandList = self.loadCommandList("cmds/special_commands.json")
+        self.externalInterfacesCommandLists = self.loadExternalInterfaceCommandLists("cmds/external")
 
-    def getCommandList(self, filename):
+    def loadCommandList(self, filename):
         """Reads the predefined commands from a JSON file.
 
         Args:
             filename (str): Name of the JSON file.
 
         Returns:
-            dict: List of commands and arguments.
+            dict: Dictionary containing commands and their arguments.
         """        
         with open(filename, "r") as cmd_file:
             commandList = json.load(cmd_file)
         return commandList
+
+    def loadExternalInterfaceCommandLists(self, folder):
+        """Reads the predefined commands for all the external TCP interfaces from the JSON files.
+
+        Args:
+            folder (str): Path of the JSON files for the external TCP interfaces.
+
+        Returns:
+            list: List of dictionaries that contain the commands and arguments for each interface.
+        """        
+        extDeviceCommandLists = []
+        files = os.listdir(folder)
+        for filename in files:
+            with open(os.path.join(folder, filename), "r") as cmd_file:
+                commandList = json.load(cmd_file)
+            extDeviceCommandLists.append(commandList)
+        return extDeviceCommandLists
+
+    def getExternalInterfaces(self):
+        """Returns a list of all external TCP interfaces.
+
+        Returns:
+            list: List of dictionaries that contain the TCP connection parameters for the external interfaces.
+        """        
+        interaces = []
+        for intf in self.externalInterfacesCommandLists:
+            interaces.append(intf['Interface'])
+        return interaces
 
     def connect(self, ip, port):
         """Connects to the Nanonis software via the TCP interface.
@@ -114,8 +145,8 @@ class NanonisInterface():
         Args:
             cmdName (str): Name of the executed command.
             sendResponse (int): Defines if the server sends a message back (=1) or not (=0).
-            argValues (list): Argument values.
-            argTypes (list): Argument types according to Number Formatting Type.
+            argValues (dict): Argument values.
+            argTypes (dict): Argument types according to Number Formatting Type.
 
         Returns:
             bytes: Encoded request message.
@@ -142,10 +173,10 @@ class NanonisInterface():
 
         Args:
             resp (bytes): Response message from Nanonis.
-            respTypes (str): Response type according to Number Formatting Types.
+            respTypes (dict): Response types according to Number Formatting Types.
 
         Returns:
-            int, float, etc.: Decoded response message.
+            dict: Decoded response message.
         """        
         headerSize = 40 # Fixed
         index = headerSize
@@ -163,7 +194,7 @@ class NanonisInterface():
             request (bytes): Request message encoded according to the Nanonis TCP Protocol.
 
         Returns:
-            bool, number: Error (True/False), Decoded response message.
+            bool, bytes: Error (True/False), Encoded response message.
         """        
         resp = ''
         err = False
@@ -182,7 +213,7 @@ class NanonisInterface():
             cmdArgs (list): Command arguments.
 
         Returns:
-            bool, number: Error (True/False), Decoded response message.
+            bool, dict: Error (True/False), Decoded response message.
         """        
         resp = ''
         err = False
@@ -217,15 +248,12 @@ class NanonisInterface():
                 # resp = b'FolMe.XYPosGet\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x18\x00\x00\x00\x00\xbd\x7f\x02m\x00\x00\x00\x00\xbd\x91\xe4\xa4\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
                 # print(resp)
                 resp = self.decodeResponseMessage(resp, respTypes)
-
-                print(cmdName)
-                # print(argTypes)
-                # print(argValues)
-                # print(respTypes)
-                # print(request)
-                # print(resp)
         elif cmdAlias in self.specialCommandList:
             err, resp = self.specialCommand(cmdAlias, cmdArgs)
+        elif len(self.externalInterfacesCommandLists) > 0:
+            for interfaceCmds in self.externalInterfacesCommandLists:
+                if cmdAlias in interfaceCmds:
+                    err, resp = self.externalCommand(interfaceCmds, cmdAlias, cmdArgs)
         
         return err, resp
     
@@ -239,7 +267,7 @@ class NanonisInterface():
             cmdArgs (list): Command arguments.
 
         Returns:
-            bool, number: Error (True/False), Decoded response message.
+            bool, dict: Error (True/False), Decoded response message.
         """
         resp = ''
         err = False
@@ -286,7 +314,10 @@ class NanonisInterface():
                         z_data[i] = z
                         time.sleep(int(dt))
 
-                    popt, _ = curve_fit(self.lin_func, t_data, z_data)
+                    def lin_func(x, m, b):
+                        return x * m + b
+
+                    popt, _ = curve_fit(lin_func, t_data, z_data)
                     vz = popt[0]
 
                     if comp_status == 1:
@@ -301,5 +332,52 @@ class NanonisInterface():
 
         return err, resp
 
-    def lin_func(self, x, m, b):
-        return x * m + b
+    def externalCommand(self, interfaceCmds, cmdAlias, cmdArgs):
+        """Executes an external command. The commands are sent to the external interfaces via TCP.
+
+        Args:
+            interfaceCmds (dict): Dictionary containing commands of external interface.
+            cmdAlias (str): Command name/alias according to JSON files.
+            cmdArgs (list): Command arguments.
+
+        Returns:
+            bool, str: Error (True/False), Response message.
+        """        
+        resp = ''
+        err = False
+
+        interface = interfaceCmds['Interface']
+        cmdName = interfaceCmds[cmdAlias]['cmdName']
+        argTypes = interfaceCmds[cmdAlias]['argTypes']
+        argValues = interfaceCmds[cmdAlias]['argValues']
+        
+        request = ''
+        argList = ''
+
+        if len(cmdArgs) == len(interfaceCmds[cmdAlias]['args']):
+            if len(cmdArgs) > 0:
+                i = 0
+                for arg in interfaceCmds[cmdAlias]['args']:
+                    if argTypes[arg] == 's':
+                        argValues[arg] = cmdArgs[i]
+                    i += 1
+
+                for _, value in argValues.items():
+                    argList += " " + value            
+
+            request = cmdName + argList
+            print(request)
+
+            try:
+                self.externalInterface = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.externalInterface.connect((interface['IP-Adress'], interface['Port']))
+
+                self.externalInterface.sendall(request.encode())
+                resp = self.externalInterface.recv(1024).decode()
+
+                self.externalInterface.close()            
+            except:
+                err = True
+                resp = "Could not connect to external interface."
+
+        return err, resp

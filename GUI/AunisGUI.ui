@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>550</width>
-    <height>450</height>
+    <height>480</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>550</width>
-    <height>450</height>
+    <height>480</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>550</width>
-    <height>450</height>
+    <height>480</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -32,8 +32,13 @@
       <x>200</x>
       <y>10</y>
       <width>341</width>
-      <height>301</height>
+      <height>321</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>false</bold>
+     </font>
     </property>
     <property name="currentIndex">
      <number>0</number>
@@ -48,7 +53,7 @@
         <x>10</x>
         <y>10</y>
         <width>311</width>
-        <height>221</height>
+        <height>241</height>
        </rect>
       </property>
      </widget>
@@ -56,7 +61,7 @@
       <property name="geometry">
        <rect>
         <x>150</x>
-        <y>240</y>
+        <y>260</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -69,7 +74,7 @@
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>240</y>
+        <y>260</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -87,10 +92,15 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>140</y>
         <width>191</width>
         <height>121</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="title">
        <string>Lateral</string>
@@ -103,6 +113,11 @@
          <width>60</width>
          <height>24</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string>Y-</string>
@@ -117,6 +132,11 @@
          <height>24</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
         <string>X+</string>
        </property>
@@ -129,6 +149,11 @@
          <width>60</width>
          <height>24</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string>X-</string>
@@ -143,6 +168,11 @@
          <height>24</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
         <string>Y+</string>
        </property>
@@ -152,10 +182,15 @@
       <property name="geometry">
        <rect>
         <x>210</x>
-        <y>130</y>
+        <y>140</y>
         <width>111</width>
         <height>121</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="title">
        <string>Vertical</string>
@@ -168,6 +203,11 @@
          <width>60</width>
          <height>24</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string>Z-</string>
@@ -182,6 +222,11 @@
          <height>24</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
         <string>Z+</string>
        </property>
@@ -191,10 +236,15 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>10</y>
         <width>311</width>
-        <height>81</height>
+        <height>101</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="locale">
        <locale language="English" country="UnitedStates"/>
@@ -206,10 +256,15 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>20</y>
+         <y>30</y>
          <width>41</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string>Δx (Å):</string>
@@ -219,10 +274,15 @@
        <property name="geometry">
         <rect>
          <x>180</x>
-         <y>20</y>
+         <y>30</y>
          <width>41</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string>Δy (Å):</string>
@@ -232,10 +292,15 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>50</y>
+         <y>60</y>
          <width>41</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string>Δz (Å):</string>
@@ -245,10 +310,15 @@
        <property name="geometry">
         <rect>
          <x>70</x>
-         <y>20</y>
+         <y>30</y>
          <width>61</width>
          <height>22</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="locale">
         <locale language="English" country="UnitedStates"/>
@@ -270,10 +340,15 @@
        <property name="geometry">
         <rect>
          <x>230</x>
-         <y>20</y>
+         <y>30</y>
          <width>61</width>
          <height>22</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="locale">
         <locale language="English" country="UnitedStates"/>
@@ -295,10 +370,15 @@
        <property name="geometry">
         <rect>
          <x>70</x>
-         <y>50</y>
+         <y>60</y>
          <width>61</width>
          <height>22</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -315,111 +395,305 @@
       </widget>
      </widget>
     </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>190</y>
-      <width>181</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>TCP Interface Settings</string>
-    </property>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>55</y>
-       <width>47</width>
-       <height>14</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Port:</string>
-     </property>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>External</string>
+     </attribute>
+     <widget class="QTableWidget" name="external_Interfaces">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>311</width>
+        <height>132</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QHeaderView::section {
+    background-color: rgb(240, 240, 240);
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="rowCount">
+       <number>4</number>
+      </property>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>20</number>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>103</number>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>26</number>
+      </attribute>
+      <row/>
+      <row/>
+      <row/>
+      <row/>
+      <column>
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>IP Adress</string>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Port</string>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="0" column="1">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="0" column="2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="1" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="1" column="2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="2" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="2" column="1">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="2" column="2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="3" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="3" column="1">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+      <item row="3" column="2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>151</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>External TCP Interfaces</string>
+      </property>
+     </widget>
     </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>25</y>
-       <width>61</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>IP Adress:</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="settings_IP">
-     <property name="geometry">
-      <rect>
-       <x>72</x>
-       <y>25</y>
-       <width>101</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="inputMask">
-      <string>000.000.000.000</string>
-     </property>
-     <property name="text">
-      <string>127.0.0.1</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="settings_Port">
-     <property name="geometry">
-      <rect>
-       <x>72</x>
-       <y>55</y>
-       <width>101</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="inputMask">
-      <string>000000</string>
-     </property>
-     <property name="text">
-      <string>6501</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="settings_Connect">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>85</y>
-       <width>75</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Connect</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="settings_Disconnect">
-     <property name="geometry">
-      <rect>
-       <x>95</x>
-       <y>85</y>
-       <width>75</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string>Disconnect</string>
-     </property>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Settings</string>
+     </attribute>
+     <widget class="QGroupBox" name="groupBox_6">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>311</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>Nanonis TCP Interface</string>
+      </property>
+      <widget class="QLabel" name="label_8">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>61</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>IP Adress:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_9">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>60</y>
+         <width>49</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Port:</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="settings_NanonisIP">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>30</y>
+         <width>113</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="inputMask">
+        <string>000.000.000.000</string>
+       </property>
+       <property name="text">
+        <string>127.0.0.1</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="settings_NanonisPort">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>60</y>
+         <width>113</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="inputMask">
+        <string>000000</string>
+       </property>
+       <property name="text">
+        <string>6501</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
@@ -428,8 +702,13 @@
       <x>10</x>
       <y>10</y>
       <width>181</width>
-      <height>161</height>
+      <height>171</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="title">
      <string>Status</string>
@@ -440,11 +719,16 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>20</y>
-       <width>151</width>
+       <width>161</width>
        <height>21</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
      </property>
      <property name="text">
       <string>Disconnected</string>
@@ -459,11 +743,16 @@
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>50</y>
+       <x>10</x>
+       <y>90</y>
        <width>47</width>
        <height>14</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
      </property>
      <property name="text">
       <string>Setpoint:</string>
@@ -475,11 +764,16 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>70</y>
-       <width>151</width>
+       <x>10</x>
+       <y>110</y>
+       <width>131</width>
        <height>21</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -488,11 +782,16 @@
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>100</y>
+       <x>10</x>
+       <y>140</y>
        <width>61</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
      </property>
      <property name="text">
       <string>Feedback:</string>
@@ -502,7 +801,7 @@
      <property name="geometry">
       <rect>
        <x>80</x>
-       <y>100</y>
+       <y>140</y>
        <width>91</width>
        <height>24</height>
       </rect>
@@ -514,6 +813,11 @@
        <disabled/>
       </palette>
      </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
      <property name="text">
       <string>-</string>
      </property>
@@ -521,14 +825,58 @@
     <widget class="QPushButton" name="status_Refresh">
      <property name="geometry">
       <rect>
-       <x>130</x>
-       <y>130</y>
-       <width>41</width>
+       <x>150</x>
+       <y>110</y>
+       <width>21</width>
        <height>24</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
      <property name="text">
       <string>⟳</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="status_Connect">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>71</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Connect</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="status_Disconnect">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>50</y>
+       <width>81</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Disconnect</string>
      </property>
     </widget>
    </widget>
@@ -539,9 +887,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>320</y>
+      <y>340</y>
       <width>531</width>
-      <height>101</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="readOnly">

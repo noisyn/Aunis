@@ -131,7 +131,8 @@
             "Vz (m/s)": "f",
             "X saturated status": "I",
             "Y saturated status": "I",
-            "Z saturated status": "I"
+            "Z saturated status": "I",
+            "Saturation limit (%)": "f"
         }
     },
     "setDriftComp": {
@@ -140,13 +141,15 @@
             "Compensation status": "I",
             "Vx (m/s)": "f",
             "Vy (m/s)": "f",
-            "Vz (m/s)": "f"
+            "Vz (m/s)": "f",
+            "Saturation limit (%)": "f"
         },
         "argValues": {
             "Compensation status": 0,
             "Vx (m/s)": 0,
             "Vy (m/s)": 0,
-            "Vz (m/s)": 0
+            "Vz (m/s)": 0,
+            "Saturation limit (%)": 10
         },
         "args": [
             "Compensation status",

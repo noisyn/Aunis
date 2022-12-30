@@ -1,9 +1,9 @@
 # Aunis - Nanonis Control & Scripting Interface
 Aunis is a control and scripting interface in Python for automating measurements within the [Nanonis Mimea™ SPM control system](https://www.specs-group.com/nanonis/products/mimea/).
 
-It requires that you have a Nanonis Mimea system including the programming interface. All commands provided via the Nanonis TCP interface can be integrated into Aunis without programming knowledge. For this purpose, the commands only have to be included in the special JSON files. 
+The only prerequisite is that you have a Nanonis Mimea system including programming interface. All commands provided via the Nanonis TCP interface can be integrated into Aunis without programming knowledge. For this purpose, the commands only have to be included in the special JSON files. Furthermore, it also allows to connect to external TCP interfaces and to send commands.
 
-Current version 0.22 (18.04.2022)
+Current version 0.27 (02.01.2022)
 
 ![GUI](images/GUI.png)
 
@@ -33,6 +33,19 @@ waitEndScan
 addBias 0.1
 wait 10
 end
+```
+
+### External TCP interfaces
+New TCP interfaces can be added by creating a new JSON file in the "/cmds/external" folder. The structure of the file follows the command structure of the normal commands. Additionally, the entry "Interface" must be created. This contains the parameters for the TCP connection. For the specification of the commands see the section Adding new commands - External commands.
+
+Here is an example to illustrate the syntax of the “Interface” entry:
+
+```json
+    "Interface": {
+        "Name": "QuPe",
+        "IP-Adress": "127.0.0.1",
+        "Port": 1337
+    }
 ```
 
 ### Adding new commands
@@ -89,7 +102,48 @@ Here is another example to illustrate the handling of return values:
 - The last entry **respTypes** defines the return values. The syntax for the last entry is similar to that of **argTypes**. The arguments and their types can be taken from the Nanonis TCP protocol. In this case there is only the return value "Z position (m)" [type: float32].
 
 #### Special command
-The special commands have to be created in the same way as the normal commands via the JSON file "special_commands.json" in the folder "/cmds". The syntax is exactly the same. In addition, their functionality must be hard coded in "PyNanonis.py".
+Special commands go beyond the capabilities of the normal commands provided through the Nanonis TCP interface and their functionality must be implemented in Python. First, the special commands have to be created in the same way as the normal commands via the JSON file "special_commands.json" in the folder "/cmds". The syntax and structure follows that of the normal commands. However, only the name/alias and **argTypes** and **args** need to be specified in more detail. All other entries are omitted. Furthermore, the functionality of the special commands must be hardcoded in "PyNanonis.py" in the function <code>specialCommand(self, cmdAlias, cmdArgs)</code>.
+
+Here is an example to illustrate the syntax and structure of a new entry/command:
+
+```json
+    "wait": {
+        "argTypes": {
+            "Time (s)": "I"
+        },
+        "args": [
+            "Time (s)"
+        ]
+    }
+```
+#### External command
+External commands are created in the same way as normal commands. For each new TCP interface, a separate JSON file must be created in the folder "/cmds/external". These must also contain the entry "Interface" as described in section External. The entry **respTypes** can be omitted.
+
+Here is an example to illustrate the syntax and structure of a new entry/command:
+
+```json
+"doRFSweep": {
+        "cmdName": "constantAmplitudeSweep",
+        "argTypes": {
+            "StartFreq (Hz)": "s",
+            "EndFreq (Hz)": "s",
+            "Vrf (V)": "s"
+        },
+        "argValues": {
+            "StartFreq (Hz)": "200e6",
+            "EndFreq (Hz)": "800e6",
+            "Vrf (V)": "5e-3"
+        },
+        "args": [
+            "StartFreq (Hz)",
+            "EndFreq (Hz)",
+            "Vrf (mV)"
+        ]
+    }
+```
+Note that for the **argTypes** entry only the type string "s" is supported, since all commands are sent as bytes representation of the Unicode string. The conversion to the correct data types must be done on the server side.
+
+The example shown here can be executed by calling <code>doRFSweep 400e6 800e6 10e-3</code> via the scripting interface. Then the string <code>constantAmplitudeSweep 400e6 800e6 10e-3</code> would be sent in bytes representation to the specified TCP interface.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).

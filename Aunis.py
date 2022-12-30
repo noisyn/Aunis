@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Taner Esat <t.esat@fz-juelich.de>
+# Copyright (c) 2022-2023 Taner Esat <t.esat@fz-juelich.de>
 
 import os
 import sys
@@ -11,6 +11,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QMainWindow
 
 from PyNanonis import NanonisInterface
+
 
 class runScriptThread(QtCore.QThread):
     logSignal = QtCore.Signal(str, str)
@@ -98,17 +99,15 @@ class AunisGUI(QMainWindow):
         self.menuManualHelp.triggered.connect(self.openManual)
 
         self.status_Status = self.ui.status_Status
+        self.status_Connect = self.ui.status_Connect
+        self.status_Disconnect = self.ui.status_Disconnect
         self.status_Setpoint = self.ui.status_Setpoint
         self.status_Feedback = self.ui.status_Feedback
         self.status_Refresh = self.ui.status_Refresh
+        self.status_Connect.clicked.connect(self.connect)
+        self.status_Disconnect.clicked.connect(self.disconnect)
         self.status_Feedback.clicked.connect(self.switchFBOnOff)
         self.status_Refresh.clicked.connect(self.updateStatus)
-        self.settings_IP = self.ui.settings_IP
-        self.settings_Port = self.ui.settings_Port
-        self.settings_Connect = self.ui.settings_Connect
-        self.settings_Disconnect = self.ui.settings_Disconnect
-        self.settings_Connect.clicked.connect(self.connect)
-        self.settings_Disconnect.clicked.connect(self.disconnect)
         self.scripting_Script = self.ui.scripting_Script
         self.scripting_Run = self.ui.scripting_Run
         self.scripting_Stop = self.ui.scripting_Stop
@@ -130,18 +129,22 @@ class AunisGUI(QMainWindow):
         self.tipman_Xplus.clicked.connect(self.moveTipXplus)
         self.tipman_Zplus.clicked.connect(self.moveTipZplus)
         self.tipman_Zminus.clicked.connect(self.moveTipZminus)
+        self.external_Interfaces = self.ui.external_Interfaces
+        self.settings_NanonisIP = self.ui.settings_NanonisIP
+        self.settings_NanonisPort = self.ui.settings_NanonisPort
 
     def startUp(self):
         """Initializes the Nanonis Interface.
         """        
         self.nni = NanonisInterface()
+        self.loadExternalInterfaces()
         self.updateStatus()
 
     def connect(self):
         """Connects to the Nanonis.
         """        
-        ip = self.settings_IP.text()
-        port = np.int(self.settings_Port.text())
+        ip = self.settings_NanonisIP.text()
+        port = np.int64(self.settings_NanonisPort.text())
         self.connected = self.nni.connect(ip, port)
         self.updateStatus()
     
@@ -270,6 +273,22 @@ class AunisGUI(QMainWindow):
         dz = (-1) * self.tipman_dz.value() * 1e-10
         err, resp = self.nni.command("addZ", [dz])
 
+    def loadExternalInterfaces(self):
+        """Loads and displays all external TCP interfaces.
+        """        
+        interfaces = self.nni.getExternalInterfaces()
+
+        for counter, intf in enumerate(interfaces):
+            item = QtWidgets.QTableWidgetItem(intf['Name'])
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.external_Interfaces.setItem(counter, 0, item)
+            item = QtWidgets.QTableWidgetItem(intf['IP-Adress'])
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.external_Interfaces.setItem(counter, 1, item)
+            item = QtWidgets.QTableWidgetItem(str(intf['Port']))
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.external_Interfaces.setItem(counter, 2, item)
+
     def showErrorMessage(self, msg):
         """Displays a message box with an error text.
 
@@ -313,8 +332,8 @@ class AunisGUI(QMainWindow):
     
     def aboutMessage(self):
         msg = 'Aunis - Nanonis Control & Scripting Interface\n\n'
-        msg += 'Version 0.22 (18.04.2022)\n\n'
-        msg += '© 2022 Taner Esat'
+        msg += 'Version 0.27 (02.01.2023)\n\n'
+        msg += '© 2022-2023 Taner Esat'
         msgbox = QtWidgets.QMessageBox()
         msgbox.setWindowIcon(QtGui.QIcon(self.fileAunisIcon))
         msgbox.setWindowTitle('About')
