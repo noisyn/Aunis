@@ -19,7 +19,7 @@
         "args": [
             "StartFreq (Hz)",
             "EndFreq (Hz)",
-            "Vrf (mV)"
+            "Vrf (V)"
         ]
     }
 }

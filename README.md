@@ -137,7 +137,7 @@ Here is an example to illustrate the syntax and structure of a new entry/command
         "args": [
             "StartFreq (Hz)",
             "EndFreq (Hz)",
-            "Vrf (mV)"
+            "Vrf (V)"
         ]
     }
 ```
