@@ -1,0 +1,58 @@
+{
+    "addX": {
+        "argTypes": {
+            "X (m)": "d"
+        },
+        "args": [
+            "X (m)"
+        ]
+    },
+    "addY": {
+        "argTypes": {
+            "Y (m)": "d"
+        },
+        "args": [
+            "Y (m)"
+        ]
+    },
+    "addZ": {
+        "argTypes": {
+            "Z (m)": "f"
+        },
+        "args": [
+            "Z (m)"
+        ]
+    },
+    "wait": {
+        "argTypes": {
+            "Time (s)": "I"
+        },
+        "args": [
+            "Time (s)"
+        ]
+    },
+    "correctZDrift": {
+        "argTypes": {
+            "Time (s)": "I"
+        },
+        "args": [
+            "Time (s)"
+        ]
+    },
+    "addBias": {
+        "argTypes": {
+            "Bias value (V)": "f"
+        },
+        "args": [
+            "Bias value (V)"
+        ]
+    },
+    "addCurrent": {
+        "argTypes": {
+            "Current value (A)": "f"
+        },
+        "args": [
+            "Current value (A)"
+        ]
+    }
+}

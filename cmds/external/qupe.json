@@ -1,0 +1,25 @@
+{
+    "Interface": {
+        "Name": "QuPe",
+        "IP-Adress": "127.0.0.1",
+        "Port": 1337
+    },
+    "doRFSweep": {
+        "cmdName": "constantAmplitudeSweep",
+        "argTypes": {
+            "StartFreq (Hz)": "s",
+            "EndFreq (Hz)": "s",
+            "Vrf (V)": "s"
+        },
+        "argValues": {
+            "StartFreq (Hz)": "200e6",
+            "EndFreq (Hz)": "800e6",
+            "Vrf (V)": "5e-3"
+        },
+        "args": [
+            "StartFreq (Hz)",
+            "EndFreq (Hz)",
+            "Vrf (V)"
+        ]
+    }
+}

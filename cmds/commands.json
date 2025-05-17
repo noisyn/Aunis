@@ -1,0 +1,365 @@
+{
+    "getFeedback": {
+        "cmdName": "ZCtrl.OnOffGet",
+        "argTypes": {},
+        "argValues": {},
+        "args": [],
+        "respTypes": {
+            "Z-Controller status": "I"
+        }
+    },
+    "setFeedback": {
+        "cmdName": "ZCtrl.OnOffSet",
+        "argTypes": {
+            "Z-Controller status": "I"
+        },
+        "argValues": {
+            "Z-Controller status": 1
+        },
+        "args": [
+            "Z-Controller status"
+        ],
+        "respTypes": {}
+    },
+    "getCurrent": {
+        "cmdName": "ZCtrl.SetpntGet",
+        "argTypes": {},
+        "argValues": {},
+        "args": [],
+        "respTypes": {
+            "Z-Controller setpoint": "f"
+        }
+    },
+    "setCurrent": {
+        "cmdName": "ZCtrl.SetpntSet",
+        "argTypes": {
+            "Z-Controller setpoint": "f"
+        },
+        "argValues": {
+            "Z-Controller setpoint": 100e-12
+        },
+        "args": [
+            "Z-Controller setpoint"
+        ],
+        "respTypes": {}
+    },
+    "getBias": {
+        "cmdName": "Bias.Get",
+        "argTypes": {},
+        "argValues": {},
+        "args": [],
+        "respTypes": {
+            "Bias value (V)": "f"
+        }
+    },
+    "setBias": {
+        "cmdName": "Bias.Set",
+        "argTypes": {
+            "Bias value (V)": "f"
+        },
+        "argValues": {
+            "Bias value (V)": 0.1
+        },
+        "args": [
+            "Bias value (V)"
+        ],
+        "respTypes": {}
+    },
+    "getZ": {
+        "cmdName": "ZCtrl.ZPosGet",
+        "argTypes": {},
+        "argValues": {},
+        "args": [],
+        "respTypes": {
+            "Z position (m)": "f"
+        }
+    },
+    "setZ": {
+        "cmdName": "ZCtrl.ZPosSet",
+        "argTypes": {
+            "Z position (m)": "f"
+        },
+        "argValues": {
+            "Z position (m)": 0
+        },
+        "args": [
+            "Z position (m)"
+        ],
+        "respTypes": {}
+    },
+    "getXY": {
+        "cmdName": "FolMe.XYPosGet",
+        "argTypes": {
+            "Wait for newest data": "I"
+        },
+        "argValues": {
+            "Wait for newest data": 1
+        },
+        "args": [],
+        "respTypes": {
+            "X (m)": "d",
+            "Y (m)": "d"
+        }
+    },
+    "setXY": {
+        "cmdName": "FolMe.XYPosSet",
+        "argTypes": {
+            "X (m)": "d",
+            "Y (m)": "d",
+            "Wait end of move": "I"
+        },
+        "argValues": {
+            "X (m)": 0,
+            "Y (m)": 0,
+            "Wait end of move": 1
+        },
+        "args": [
+            "X (m)",
+            "Y (m)"
+        ],
+        "respTypes": {}
+    },
+    "getDriftComp": {
+        "cmdName": "Piezo.DriftCompGet",
+        "argTypes": {},
+        "argValues": {},
+        "args": [],
+        "respTypes": {
+            "Compensation status": "I",
+            "Vx (m/s)": "f",
+            "Vy (m/s)": "f",
+            "Vz (m/s)": "f",
+            "X saturated status": "I",
+            "Y saturated status": "I",
+            "Z saturated status": "I",
+            "Saturation limit (%)": "f"
+        }
+    },
+    "setDriftComp": {
+        "cmdName": "Piezo.DriftCompSet",
+        "argTypes": {
+            "Compensation status": "I",
+            "Vx (m/s)": "f",
+            "Vy (m/s)": "f",
+            "Vz (m/s)": "f",
+            "Saturation limit (%)": "f"
+        },
+        "argValues": {
+            "Compensation status": 0,
+            "Vx (m/s)": 0,
+            "Vy (m/s)": 0,
+            "Vz (m/s)": 0,
+            "Saturation limit (%)": 10
+        },
+        "args": [
+            "Compensation status",
+            "Vx (m/s)",
+            "Vy (m/s)",
+            "Vz (m/s)"
+        ],
+        "respTypes": {}
+    },
+    "doBiasSpec": {
+        "cmdName": "BiasSpectr.Start",
+        "argTypes": {
+            "Get data": "I",
+            "Save base name string size": "i",
+            "Save base name": "s"
+        },
+        "argValues": {
+            "Get data": 0,
+            "Save base name string size": 0,
+            "Save base name": ""
+        },
+        "args": [],
+        "respTypes": {}
+    },
+    "getBiasSpecLimits": {
+        "cmdName": "BiasSpectr.LimitsGet",
+        "argTypes": {},
+        "argValues": {},
+        "args": [],
+        "respTypes": {
+            "Start value (V)": "f",
+            "End value (V)": "f"
+        }
+    },
+    "setBiasSpecLimits": {
+        "cmdName": "BiasSpectr.LimitsSet",
+        "argTypes": {
+            "Start value (V)": "f",
+            "End value (V)": "f"
+        },
+        "argValues": {
+            "Start value (V)": 0,
+            "End value (V)": 1
+        },
+        "args": [
+            "Start value (V)",
+            "End value (V)"
+        ],
+        "respTypes": {}
+    },
+    "doScan": {
+        "cmdName": "Scan.Action",
+        "argTypes": {
+            "Scan action": "H",
+            "Scan direction": "I"
+        },
+        "argValues": {
+            "Scan action": 0,
+            "Scan direction": 0
+        },
+        "args": [],
+        "respTypes": {}
+    },
+    "waitEndScan": {
+        "cmdName": "Scan.WaitEndOfScan",
+        "argTypes": {
+            "Timeout (ms)": "i"
+        },
+        "argValues": {
+            "Timeout (ms)": -1
+        },
+        "args": [],
+        "respTypes": {}
+    },
+    "setLockinPhase": {
+        "cmdName": "LockIn.DemodPhasSet",
+        "argTypes": {
+            "Demodulator number": "i",
+            "Phase (deg)": "f"
+        },
+        "argValues": {
+            "Demodulator number": 1,
+            "Phase (deg)": 0
+        },
+        "args": [
+            "Phase (deg)"
+        ],
+        "respTypes": {}
+    },
+    "getLockinPhase": {
+        "cmdName": "LockIn.DemodPhasGet",
+        "argTypes": {
+            "Demodulator number": "i"
+        },
+        "argValues": {
+            "Demodulator number": 1
+        },
+        "args": [],
+        "respTypes": {
+            "Phase (deg)": "f"
+        }
+    },
+    "setGainIndex": {
+        "cmdName": "Current.GainSet",
+        "argTypes": {
+            "Gain index": "H"
+        },
+        "argValues": {
+            "Gain index": 0
+        },
+        "args": [
+            "Gain index"
+        ],
+        "respTypes": {}
+    },
+    "withdraw": {
+        "cmdName": "ZCtrl.Withdraw",
+        "argTypes": {
+            "Wait until finished": "I",
+            "Timeout (ms)": "i"
+        },
+        "argValues": {
+            "Wait until finished": 1,
+            "Timeout (ms)": -1
+        },
+        "args": [],
+        "respTypes": {}
+    },
+    "setAtomTrackingModulation": {
+        "cmdName": "AtomTrack.CtrlSet",
+        "argTypes": {
+            "AT control": "H",
+            "Status": "H"
+        },
+        "argValues": {
+            "AT control": 0
+        },
+        "args": [
+            "Status"
+        ],
+        "respTypes": {}
+    },
+    "setAtomTrackingController": {
+        "cmdName": "AtomTrack.CtrlSet",
+        "argTypes": {
+            "AT control": "H",
+            "Status": "H"
+        },
+        "argValues": {
+            "AT control": 1
+        },
+        "args": [
+            "Status"
+        ],
+        "respTypes": {}
+    },
+    "setLockinAmplitude": {
+        "cmdName": "LockIn.ModAmpSet",
+        "argTypes": {
+            "Modulator number": "i",
+            "Amplitude": "f"
+        },
+        "argValues": {
+            "Modulator number": 1,
+            "Amplitude": 1e-3
+        },
+        "args": [
+            "Amplitude"
+        ],
+        "respTypes": {}
+    },
+    "getLockinAmplitude": {
+        "cmdName": "LockIn.ModAmpGet",
+        "argTypes": {
+            "Modulator number": "i"
+        },
+        "argValues": {
+            "Modulator number": 1
+        },
+        "args": [],
+        "respTypes": {
+            "Amplitude": "f"
+        }
+    },
+    "setLockinFrequency": {
+        "cmdName": "LockIn.ModPhasFreqSet",
+        "argTypes": {
+            "Modulator number": "i",
+            "Frequency (Hz)": "d"
+        },
+        "argValues": {
+            "Modulator number": 1,
+            "Frequency (Hz)": 187
+        },
+        "args": [
+            "Frequency (Hz)"
+        ],
+        "respTypes": {}
+    },
+    "getLockinFrequency": {
+        "cmdName": "LockIn.ModPhasFreqGet",
+        "argTypes": {
+            "Modulator number": "i"
+        },
+        "argValues": {
+            "Modulator number": 1
+        },
+        "args": [],
+        "respTypes": {
+            "Frequency (Hz)": "d"
+        }
+    }
+}

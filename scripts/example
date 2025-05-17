@@ -1,0 +1,8 @@
+setBias 0.1
+
+repeat 10
+doScan
+waitEndScan
+addBias 0.1
+wait 10
+end
