@@ -19,7 +19,7 @@ Aunis requires the following libraries:
 - PySide6
 
 ## Documentation
-A user manual can be found here: [Manual](Manual/manual.pdf).
+A user manual can be found here: [Manual](manual/manual.pdf).
 
 ### Example
 The following example initially sets the bias voltage to 0.1 V. Then it scans an image, increases the bias voltage by 0.1 V, waits for 10 s and repeats the whole process 10 times.
