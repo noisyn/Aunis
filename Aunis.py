@@ -163,7 +163,7 @@ class AunisUI(QMainWindow):
         err, resp = self.nni.command("getBias", [])
         V = resp['Bias value (V)'] / 1e-3
         setpoint = '{:.2f} pA; {:.2f} mV'.format(I, V)
-        self.status_Setpoint.setText(setpoint)
+        self.uiAu.status_Setpoint.setText(setpoint)
 
     def switchFBOnOff(self):
         """Switches the feedback on or off.
@@ -182,17 +182,17 @@ class AunisUI(QMainWindow):
         """        
         err, resp = self.nni.command("getFeedback", [])
         if resp["Z-Controller status"] == 0:
-            self.status_Feedback.setText('Off')
-            self.status_Feedback.setStyleSheet('color: rgb(0,0,0); background-color: rgb(237,51,59);')
+            self.uiAu.status_Feedback.setText('Off')
+            self.uiAu.status_Feedback.setStyleSheet('color: rgb(0,0,0); background-color: rgb(237,51,59);')
         if resp["Z-Controller status"] == 1:
-            self.status_Feedback.setText('On')
-            self.status_Feedback.setStyleSheet('color: rgb(0,0,0); background-color: rgb(51,209,122);')
+            self.uiAu.status_Feedback.setText('On')
+            self.uiAu.status_Feedback.setStyleSheet('color: rgb(0,0,0); background-color: rgb(51,209,122);')
 
     def runScript(self):
         """Starts the execution of the current script.
         """        
         self.threadScript.nni = self.nni
-        self.threadScript.script = self.scripting_Script.toPlainText()
+        self.threadScript.script = self.uiAu.scripting_Script.toPlainText()
         self.threadScript.cancelScript = False
         self.threadScript.start()
       
@@ -205,37 +205,37 @@ class AunisUI(QMainWindow):
     def moveTipXplus(self):
         """Moves the tip in X+ direction by the specified amount.
         """        
-        dx = self.tipman_dx.value() * 1e-10
+        dx = self.uiAu.tipman_dx.value() * 1e-10
         err, resp = self.nni.command("addX", [dx])
 
     def moveTipXminus(self):
         """Moves the tip in X- direction by the specified amount.
         """        
-        dx = (-1) * self.tipman_dx.value() * 1e-10
+        dx = (-1) * self.uiAu.tipman_dx.value() * 1e-10
         err, resp = self.nni.command("addX", [dx])
     
     def moveTipYplus(self):
         """Moves the tip in Y+ direction by the specified amount.
         """        
-        dy = self.tipman_dy.value() * 1e-10
+        dy = self.uiAu.tipman_dy.value() * 1e-10
         err, resp = self.nni.command("addY", [dy])
 
     def moveTipYminus(self):
         """Moves the tip in Y- direction by the specified amount.
         """        
-        dy = (-1) * self.tipman_dy.value() * 1e-10
+        dy = (-1) * self.uiAu.tipman_dy.value() * 1e-10
         err, resp = self.nni.command("addY", [dy])
 
     def moveTipZplus(self):
         """Moves the tip in Z+ direction by the specified amount.
         """        
-        dz = self.tipman_dz.value() * 1e-10
+        dz = self.uiAu.tipman_dz.value() * 1e-10
         err, resp = self.nni.command("addZ", [dz])
 
     def moveTipZminus(self):
         """Moves the tip in Z- direction by the specified amount.
         """        
-        dz = (-1) * self.tipman_dz.value() * 1e-10
+        dz = (-1) * self.uiAu.tipman_dz.value() * 1e-10
         err, resp = self.nni.command("addZ", [dz])
 
     def loadExternalInterfaces(self):
@@ -261,9 +261,9 @@ class AunisUI(QMainWindow):
             msg (str): Error message.
         """        
         msgbox = QtWidgets.QMessageBox()
-        msgbox.setWindowIcon(QtGui.QIcon(self.fileAunisIcon))
+        msgbox.setWindowIcon(QtGui.QIcon(self.fileIcon))
         msgbox.setWindowTitle('Information')
-        msgbox.setIcon(QtWidgets.QMessageBox.Information)
+        msgbox.setIcon(QtWidgets.QMessageBox.information)
         msgbox.setText(msg)
         msgbox.exec()
 
