@@ -1,4 +1,4 @@
-# Copyright (c) 2022-2025 Taner Esat <t.esat@fz-juelich.de>
+# Copyright (c) 2022-2026 Taner Esat <t.esat@fz-juelich.de>
 
 import os
 import sys
@@ -305,8 +305,9 @@ class AunisUI(QMainWindow):
     
     def aboutMessage(self):
         msg = 'Aunis - Nanonis Scripting Interface\n\n'
-        msg += 'Version 0.41 (28.08.2025)\n\n'
-        msg += '© 2022-2025 Taner Esat'
+        msg += 'Version 0.6 (02 Jan 2026)\n\n'
+        msg += '© 2022-2026 Taner Esat\n'
+        msg += 'Email: t.esat@fz-juelich.de'
         msgbox = QtWidgets.QMessageBox()
         msgbox.setWindowIcon(QtGui.QIcon(self.fileIcon))
         msgbox.setWindowTitle('About')

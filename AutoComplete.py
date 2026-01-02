@@ -1,4 +1,4 @@
-# Copyright (c) 2022-2025 Taner Esat <t.esat@fz-juelich.de>
+# Copyright (c) 2022-2026 Taner Esat <t.esat@fz-juelich.de>
 
 from PySide6 import QtGui
 from PySide6.QtCore import Qt

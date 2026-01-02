@@ -1,7 +1,10 @@
-# Copyright (c) 2022-2025 Taner Esat <t.esat@fz-juelich.de>
+# Copyright (c) 2022-2026 Taner Esat <t.esat@fz-juelich.de>
 
+import ast
 import socket
+import re
 import time
+import numbers
 import numpy as np
 import nanonis_spm
 from scipy.optimize import curve_fit
@@ -110,6 +113,9 @@ class ScriptingInterface():
     def __init__(self):
         self.commandList = FUNCTION_REGISTRY
         self.connected = False
+
+        # List/for support (parse-time only)
+        self._var_placeholder = re.compile(r"\$([A-Za-z_]\w*)")
     
     def connect(self, ip, port): 
         """Connect to Nanonis TCP Interface.
@@ -137,6 +143,36 @@ class ScriptingInterface():
         if self.connected:
             self.nanonis.close()
             self.connected = False
+
+    def _parse_numeric_list_literal(self, rhs: str):
+        """Parse numeric-only list literals like [1, 2, 3.5, 1e-3].
+
+        Allowed:
+            - int, float (incl. scientific notation)
+
+        Disallowed:
+            - bool, strings, nested lists, any non-numeric type
+        """
+        val = ast.literal_eval(rhs.strip())
+
+        if not isinstance(val, list):
+            raise ValueError("List definition must be a list literal like [1,2,3]")
+
+        for v in val:
+            # bool is a subclass of int -> exclude explicitly
+            if isinstance(v, bool) or not isinstance(v, numbers.Real):
+                raise ValueError(f"Invalid list element {v!r}: only numeric values are allowed")
+
+        return val
+    
+    def _interpolate_token(self, token: str, vars_env: dict):
+        """Replace $var and {var} with vars_env[var] if present (stringified)."""
+        def repl_placeholder(m):
+            k = m.group(1)
+            return str(vars_env.get(k, m.group(0)))
+
+        token = self._var_placeholder.sub(repl_placeholder, token)
+        return token
     
     def check_syntax(self, script: str):
         """Validate text script for correct commands and argument counts.
@@ -153,42 +189,105 @@ class ScriptingInterface():
         """       
         errors = []
         lines = [line.strip() for line in script.splitlines() if line.strip()]
-        stack = []
+
+        block_stack = []   # entries: "loop" or "for"
+        var_stack = []     # stack of sets of active loop variables
+        known_lists = set()
+
+        VAR_REF = re.compile(r"\$([A-Za-z_]\w*)|\{([A-Za-z_]\w*)\}")
 
         for line_num, line in enumerate(lines, start=1):
+
+            # list <name> [ ... ]
+            if line.startswith("list "):
+                try:
+                    parts = line.split(None, 2)
+                    if len(parts) != 3:
+                        raise ValueError
+                    _, name, rhs = parts
+
+                    if not re.match(r"^[A-Za-z_]\w*$", name):
+                        raise ValueError
+
+                    self._parse_numeric_list_literal(rhs)
+                    known_lists.add(name)
+                except Exception:
+                    errors.append(f"Line {line_num}: invalid list syntax → {line}")
+                continue
+
+            # loop N (does not introduce variables)
             if line.startswith("loop"):
                 parts = line.split()
                 if len(parts) != 2 or not parts[1].isdigit():
                     errors.append(f"Line {line_num}: invalid loop syntax → {line}")
                 else:
-                    stack.append("loop")
+                    block_stack.append("loop")
+                    var_stack.append(set(var_stack[-1]) if var_stack else set())
+                continue
 
-            elif line == "end":
-                if not stack:
-                    errors.append(f"Line {line_num}: 'end' without matching 'loop' → {line}")
-                else:
-                    stack.pop()
-
-            else:
+            # for var in listname (introduces a variable)
+            if line.startswith("for "):
                 parts = line.split()
-                cmd_name = parts[0]
+                if len(parts) != 4 or parts[2] != "in":
+                    errors.append(f"Line {line_num}: invalid for syntax → {line}")
+                else:
+                    var_name = parts[1]
+                    list_name = parts[3]
 
-                if cmd_name not in FUNCTION_REGISTRY:
-                    errors.append(f"Line {line_num}: unknown command → {line}")
-                    continue
+                    if not re.match(r"^[A-Za-z_]\w*$", var_name):
+                        errors.append(f"Line {line_num}: invalid loop variable name → {line}")
 
-                cmd_info = FUNCTION_REGISTRY[cmd_name]
-                expected_user_args = sum(1 for a in cmd_info["args"].values() if a["user"])
-                given_args = len(parts) - 1
+                    if list_name not in known_lists:
+                        errors.append(f"Line {line_num}: unknown list '{list_name}' → {line}")
 
-                if given_args != expected_user_args:
-                    errors.append(
-                        f"Line {line_num}: wrong number of arguments for '{cmd_name}'. "
-                        f"Expected {expected_user_args}, got {given_args} → {line}"
-                    )
+                    block_stack.append("for")
 
-        if stack:
-            errors.append("Unclosed 'loop' detected")
+                    # new variable scope level
+                    current_vars = set(var_stack[-1]) if var_stack else set()
+                    current_vars.add(var_name)
+                    var_stack.append(current_vars)
+                continue
+
+            # end
+            if line == "end":
+                if not block_stack:
+                    errors.append(f"Line {line_num}: 'end' without opener")
+                else:
+                    block_stack.pop()
+                    var_stack.pop()
+                continue
+
+            # normal command line
+            parts = line.split()
+            cmd_name = parts[0]
+
+            if cmd_name not in FUNCTION_REGISTRY:
+                errors.append(f"Line {line_num}: unknown command → {line}")
+                continue
+
+            # validate argument count
+            cmd_info = FUNCTION_REGISTRY[cmd_name]
+            expected = sum(1 for a in cmd_info["args"].values() if a["user"])
+            given = len(parts) - 1
+
+            if expected != given:
+                errors.append(
+                    f"Line {line_num}: wrong number of arguments for '{cmd_name}' "
+                    f"(expected {expected}, got {given})"
+                )
+
+            active_vars = var_stack[-1] if var_stack else set()
+
+            for token in parts[1:]:
+                for m in VAR_REF.finditer(token):
+                    var_name = m.group(1) or m.group(2)
+                    if var_name not in active_vars:
+                        errors.append(
+                            f"Line {line_num}: undefined loop variable '${var_name}' → {line}"
+                        )
+
+        if block_stack:
+            errors.append("Unclosed block detected")
 
         return errors
 
@@ -198,7 +297,11 @@ class ScriptingInterface():
         The parser:
         - Splits the script into lines.
         - Handles nested loops ("loop X" ... "end").
-        - Expands loops into repeated command blocks.
+        - Handles list definitions ("list name [..]") (numeric-only).
+        - Handles list iteration ("for var in listname" ... "end").
+        - Expands loops/for into repeated command blocks.
+        - Performs $var substitution during parsing.
+        - Casts args to the required types during parsing.
         - Validates syntax before parsing.
 
         Args:
@@ -208,7 +311,7 @@ class ScriptingInterface():
             tuple: (commands, errors)
                 - commands (list[dict]): A flat list of parsed commands, where each command is a dict:
                                 {
-                                    "command": <str>,   # Command name as written in script
+                                    "cmd": <str>,   # Command name as written in script
                                     "func": <callable>, # Function or method reference
                                     "args": <list>,     # Positional argument values
                                 }
@@ -222,7 +325,7 @@ class ScriptingInterface():
         commands, _ = self._parse_block(lines)
         return commands, []
     
-    def _parse_block(self, lines, index=0):
+    def _parse_block(self, lines, index=0, lists_env=None, vars_env=None):
         """ Recursively parse a block of script lines, expanding loops into repeated commands.
 
         Args:
@@ -243,49 +346,116 @@ class ScriptingInterface():
             "Nanonis": self.nanonis,
             "ScriptingInterface": self,
         }
+
+        if lists_env is None:
+            lists_env = {}
+        if vars_env is None:
+            vars_env = {}
+
+        def _extract_block_lines(lines, start_index):
+            """Return (block_lines, next_index_after_end) for the block starting at start_index."""
+            depth = 0
+            block_lines = []
+            i = start_index
+
+            while i < len(lines):
+                ln = lines[i]
+
+                if ln.startswith("loop") or ln.startswith("for "):
+                    depth += 1
+                    block_lines.append(ln)
+                    i += 1
+                    continue
+
+                if ln == "end":
+                    if depth == 0:
+                        return block_lines, i + 1
+                    depth -= 1
+                    block_lines.append(ln)
+                    i += 1
+                    continue
+
+                block_lines.append(ln)
+                i += 1
+
+            # should not happen if check_syntax passed
+            raise ValueError("Unclosed block while extracting lines")
+
         result = []
         while index < len(lines):
             line = lines[index]
 
+            # list <name> [ ... ]  -> store only (no command emitted)
+            if line.startswith("list "):
+                _, name, rhs = line.split(None, 2)
+                lists_env[name] = self._parse_numeric_list_literal(rhs)
+                index += 1
+                continue
+
+            # loop N
             if line.startswith("loop"):
                 _, count_str = line.split()
                 count = int(count_str)
-                block, index = self._parse_block(lines, index + 1)
+
+                body_lines, next_index = _extract_block_lines(lines, index + 1)
+                block, _ = self._parse_block(body_lines, 0, lists_env, vars_env)
                 result.extend(block * count)
+
+                index = next_index
                 continue
 
-            elif line == "end":
+            # for var in listname
+            if line.startswith("for "):
+                parts = line.split()
+                var_name = parts[1]
+                list_name = parts[3]
+
+                body_lines, next_index = _extract_block_lines(lines, index + 1)
+
+                for v in lists_env[list_name]:
+                    new_vars = dict(vars_env)
+                    new_vars[var_name] = v
+                    block, _ = self._parse_block(body_lines, 0, lists_env, new_vars)
+                    result.extend(block)
+
+                index = next_index
+                continue
+
+            # end
+            if line == "end":
                 return result, index + 1
 
-            else:
-                parts = line.split()
-                cmd_name = parts[0]
-                cmd_info = FUNCTION_REGISTRY[cmd_name]
+            # normal command
+            parts = line.split()
+            cmd_name = parts[0]
+            cmd_info = FUNCTION_REGISTRY[cmd_name]
 
-                args = []
-                user_values = parts[1:]
-                user_index = 0
-                for arg_name, arg_info in cmd_info["args"].items():
-                    if arg_info["user"]:
-                        args.append(arg_info["type"](user_values[user_index]))
-                        user_index += 1
-                    else:
-                        args.append(arg_info["default"])
+            # interpolate user values BEFORE casting
+            user_values = [self._interpolate_token(tok, vars_env) for tok in parts[1:]]
 
-                func_ref = cmd_info["func"]
-                if hasattr(func_ref, "__qualname__") and "." in func_ref.__qualname__:
-                    cls_name = func_ref.__qualname__.split(".")[0]
-                    instance = INSTANCE_MAP[cls_name]
-                    func = func_ref.__get__(instance)
+            args = []
+            user_index = 0
+            for arg_name, arg_info in cmd_info["args"].items():
+                if arg_info["user"]:
+                    args.append(arg_info["type"](user_values[user_index]))
+                    user_index += 1
                 else:
-                    func = func_ref
+                    args.append(arg_info["default"])
 
-                result.append({
-                    "cmd": cmd_name,
-                    "func": func,
-                    "args": args,
-                })
-                index += 1
+            func_ref = cmd_info["func"]
+            if hasattr(func_ref, "__qualname__") and "." in func_ref.__qualname__:
+                cls_name = func_ref.__qualname__.split(".")[0]
+                instance = INSTANCE_MAP[cls_name]
+                func = func_ref.__get__(instance)
+            else:
+                func = func_ref
+
+            result.append({
+                "cmd": cmd_name,
+                "func": func,
+                "args": args,
+            })
+            index += 1
 
         return result, index
     
@@ -487,6 +657,30 @@ FUNCTION_REGISTRY = {
             "End value (V)": {"type": np.float32, "default": 1.0, "user": True},
         },
     },
+    "biasSpec.SweepsSet": {
+        "func": nanonis_spm.Nanonis.BiasSpectr_PropsSet,
+        "args": {
+            "Save all": {"type": np.uint16, "default": 1, "user": False},
+            "Number of sweeps": {"type": np.int32, "default": 0, "user": True},
+            "Backward sweeps": {"type": np.uint16, "default": 0, "user": False},
+            "Number of points": {"type": np.int32, "default": 0, "user": False},
+            "Z offset (m)": {"type": np.float32, "default": 0, "user": False},
+            "Autosave": {"type": np.uint16, "default": 0, "user": False},
+            "Show save dialog": {"type": np.uint16, "default": 0, "user": False}
+        },
+    },
+    "biasSpec.PointsSet": {
+        "func": nanonis_spm.Nanonis.BiasSpectr_PropsSet,
+        "args": {
+            "Save all": {"type": np.uint16, "default": 1, "user": False},
+            "Number of sweeps": {"type": np.int32, "default": 0, "user": False},
+            "Backward sweeps": {"type": np.uint16, "default": 0, "user": False},
+            "Number of points": {"type": np.int32, "default": 0, "user": True},
+            "Z offset (m)": {"type": np.float32, "default": 0, "user": False},
+            "Autosave": {"type": np.uint16, "default": 0, "user": False},
+            "Show save dialog": {"type": np.uint16, "default": 0, "user": False}
+        },
+    },
     "scan.Start": {
         "func": nanonis_spm.Nanonis.Scan_Action,
         "args": {
@@ -539,6 +733,13 @@ FUNCTION_REGISTRY = {
             "Modulator number": {"type": np.int32, "default": 1, "user": False}, 
         },
     },
+    "lockin.ModSet": {
+        "func": nanonis_spm.Nanonis.LockIn_ModOnOffSet,
+        "args": {
+            "Modulator number": {"type": np.int32, "default": 1, "user": False},
+            "Lock-In On/Off": {"type": np.uint32, "default": 1, "user": True},
+        },
+    },
     "atomtrack.ModSet": {
         "func": nanonis_spm.Nanonis.AtomTrack_CtrlSet,
         "args": {
@@ -581,7 +782,7 @@ FUNCTION_REGISTRY = {
         },
     },
     "xy.Set": {
-        "func": ScriptingInterface.setZ,
+        "func": ScriptingInterface.setXY,
         "args": {
             "x (m)": {"type": np.float64, "default": 0.0, "user": True},
             "y (m)": {"type": np.float64, "default": 0.0, "user": True},

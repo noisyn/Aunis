@@ -20,6 +20,7 @@ A Nanonis Mimea system with the programming interface enabled.
 - Script execution:
     - Syntax check is performed before script execution to ensure correctness.
     - Supports nested loops for advanced automation routines.
+    - Supports iteration over lists. Nested loops are allowed, and for loops can be combined with normal loops.
     - Autocomplete feature assists while writing scripts, suggesting available commands.
 - Integration with external systems:
     - Supports connections to external TCP interfaces.
@@ -28,13 +29,31 @@ A Nanonis Mimea system with the programming interface enabled.
 
 **Version Information**
 
-Current version: 0.41
+Current version: 0.6
 
-Release date: 28.08.2025
+Release date: 02 Jan 2026
 
 **Graphical User Interface**
 
 ![GUI](UI/GUI.png)
+
+## Release Notes
+**Version 0.6 (02 Jan 2026)**
+
+- Implemented list definition and list iteration
+- Fixed a bug in the xy.Set command
+- Added new commands: 
+    - Bias Spectroscopy: biasSpec.SweepsSet, biasSpec.PointsSet, 
+    - Lock-In: lockin.ModSet, 
+    - General: list, for loops
+- Updated the manual
+
+**Versio 0.41 (28 Aug 2025)**
+
+- Changed the interface for communication to nanonis_spm
+- Support for nested loops added
+- Command structure modified
+- Syntax checker added
 
 ## Installation
 Clone the Github repository using
@@ -85,6 +104,20 @@ loop 10
    end
 current.Set 50e-12
 bias.Add 0.1
+end
+```
+
+This example demonstrates the use of for loops in combination with lists.
+```
+bias.Set 0.05
+current.Set 50e-12
+
+list biasvals [0.1, 0.3, 500e-3]
+for x in biasvals
+    bias.Set $x
+    wait 5
+    scan.Start
+    scan.Wait
 end
 ```
 
