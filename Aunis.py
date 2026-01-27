@@ -305,7 +305,7 @@ class AunisUI(QMainWindow):
     
     def aboutMessage(self):
         msg = 'Aunis - Nanonis Scripting Interface\n\n'
-        msg += 'Version 0.6 (02 Jan 2026)\n\n'
+        msg += 'Version 0.62 (27 Jan 2026)\n\n'
         msg += '© 2022-2026 Taner Esat\n'
         msg += 'Email: t.esat@fz-juelich.de'
         msgbox = QtWidgets.QMessageBox()

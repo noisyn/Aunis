@@ -29,26 +29,33 @@ A Nanonis Mimea system with the programming interface enabled.
 
 **Version Information**
 
-Current version: 0.6
+Current version: 0.62
 
-Release date: 02 Jan 2026
+Release date: 27 Jan 2026
 
 **Graphical User Interface**
 
 ![GUI](UI/GUI.png)
 
 ## Release Notes
+**Version 0.62 (27 Jan 2026)**
+
+- Renamed command: atomtrack.TrackSet to atomtrack.CtrlSet
+- Added new commands: 
+    - Atom tracking: atomtrack.DriftMeasSet, atomtrack.DriftComp
+- Updated the manual
+
 **Version 0.6 (02 Jan 2026)**
 
 - Implemented list definition and list iteration
 - Fixed a bug in the xy.Set command
 - Added new commands: 
-    - Bias Spectroscopy: biasSpec.SweepsSet, biasSpec.PointsSet, 
+    - Bias Spectroscopy: biasSpec.SweepsSet, biasSpec.PointsSet
     - Lock-In: lockin.ModSet, 
     - General: list, for loops
 - Updated the manual
 
-**Versio 0.41 (28 Aug 2025)**
+**Version 0.41 (28 Aug 2025)**
 
 - Changed the interface for communication to nanonis_spm
 - Support for nested loops added

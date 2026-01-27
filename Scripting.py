@@ -747,11 +747,23 @@ FUNCTION_REGISTRY = {
             "Status": {"type": np.uint16, "default": 0, "user": True},
         },
     },
-    "atomtrack.TrackSet": {
+    "atomtrack.CtrlSet": {
         "func": nanonis_spm.Nanonis.AtomTrack_CtrlSet,
         "args": {
              "AT control": {"type": np.uint16, "default": 1, "user": False},
             "Status": {"type": np.uint16, "default": 0, "user": True},
+        },
+    },
+    "atomtrack.DriftMeasSet": {
+        "func": nanonis_spm.Nanonis.AtomTrack_CtrlSet,
+        "args": {
+             "AT control": {"type": np.uint16, "default": 2, "user": False},
+            "Status": {"type": np.uint16, "default": 0, "user": True},
+        },
+    },
+    "atomtrack.DriftComp": {
+        "func": nanonis_spm.Nanonis.AtomTrack_DriftComp,
+        "args": {
         },
     },
     "withdraw": {
